@@ -1,0 +1,62 @@
+<form [formGroup]="reservationForm" (ngSubmit)="onSubmit()">
+
+    <div>
+        <label>Check-In Datum:</label>
+        <input type="date" id="checkInDate" formControlName="checkInDate" class="ng-dirty ng-valid ng-touched">
+
+
+        @if (reservationForm.get('checkInDate')?.invalid && reservationForm.get('checkInDate')?.touched) {
+            <div>
+                Bitte geben Sie ein gültiges Check-In Datum ein.
+            </div>
+        }
+    </div>
+
+    <div>
+        <label>Check-Out Datum:</label>
+        <input type="date" id="checkOutDate" formControlName="checkOutDate">
+        @if (reservationForm.get('checkOutDate')?.errors?.['dateRange'] && reservationForm.get('checkOutDate')?.touched) {
+            <div>
+                Das Auscheckdatum muss größer als das Eincheckdatum sein.
+            </div>
+        }
+        @if (reservationForm.get('checkOutDate')?.invalid && reservationForm.get('checkOutDate')?.touched && !reservationForm.get('checkOutDate')?.errors?.['dateRange']) {
+            <div>
+                Bitte geben Sie ein gültiges Check-Out Datum ein.
+            </div>
+        }
+    </div>
+
+    <div>
+        <label>Name des Gastes:</label>
+        <input type="text" id="guestName" formControlName="guestName">
+        @if (reservationForm.get('guestName')?.invalid && reservationForm.get('guestName')?.touched) {
+            <div>
+                Bitte geben Sie einen gültigen Gästenamen ein.
+            </div>
+        }
+    </div>
+
+    <div>
+        <label>E-Mail des Gastes:</label>
+        <input type="email" id="guestEmail" formControlName="guestEmail">
+        @if (reservationForm.get('guestEmail')?.invalid && reservationForm.get('guestEmail')?.touched) {
+            <div>
+                Bitte geben Sie eine gültige E-Mail-Adresse ein.
+            </div>
+        }
+    </div>
+
+    <div>
+        <label>Zimmernummer:</label>
+        <input type="number" id="roomNumber" formControlName="roomNumber">
+        @if (reservationForm.get('roomNumber')?.invalid && reservationForm.get('roomNumber')?.touched) {
+            <div>
+                Bitte geben Sie eine gültige Raumnummer ein.
+            </div>
+        }
+    </div>
+
+    <button type="submit" [disabled]="reservationForm.invalid">Absenden</button>
+
+</form>

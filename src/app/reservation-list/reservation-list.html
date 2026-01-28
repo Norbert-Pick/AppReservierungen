@@ -1,0 +1,46 @@
+<div class="container">
+
+        <div class="row py-2 border-bottom">
+            <div class="col-md-5"><h2>Liste der Reservierungen</h2></div>
+            <div class="col-md-3">
+                <button class="btn btn-primary btn-sm w-100" (click)="navigateNewReservation()">
+                    Neue Reservierung anlegen
+                </button>
+            </div>
+        </div>
+
+    <div class="mt-2">
+        @if (reservations.length > 0) {
+        <!-- Spalten-Header -->
+        <div class="row mt-3 fw-bold">
+            <div class="col-md-3">Gast</div>
+            <div class="col-md-3">E-Mail</div>
+            <div class="col-md-1">Zimmer</div>
+            <div class="col-md-2">Check-In</div>
+            <div class="col-md-2">Check-Out</div>
+            <div class="col-md-1">Aktion</div>
+        </div>
+
+        <!-- Listen-Einträge -->
+        @for (reservation of reservations; track reservation.id) {
+        <div class="row py-2 border-bottom">
+            <div class="col-md-3">{{ reservation.guestName }}</div>
+            <div class="col-md-3">{{ reservation.guestEmail }}</div>
+            <div class="col-md-1">{{ reservation.roomNumber }}</div>
+            <div class="col-md-2">{{ reservation.checkInDate }}</div>
+            <div class="col-md-2">{{ reservation.checkOutDate }}</div>
+            <div class="col-md-1">
+                <button class="btn btn-danger btn-sm w-100" (click)="deleteReservation(reservation.id)">
+                    Löschen
+                </button>
+            </div>
+        </div>
+        }
+        } @else {
+        <div class="mt-3">
+            Keine Reservierungen gefunden.
+        </div>
+        }
+    </div>
+
+</div>
