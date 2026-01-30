@@ -1,62 +1,96 @@
+<app-home></app-home>
+
+@if (isCompletedStay) {
+<h3 class="my-5 mb-3">Abgeschlossener Aufenthalt</h3>
+} @else if (isEditMode) {
+<h3 class="my-5 mb-3">Reservierung bearbeiten</h3>
+} @else {
+<h3 class="my-5 mb-3">Eine neue Reservierung erstellen</h3>
+}
+<hr>
+
 <form [formGroup]="reservationForm" (ngSubmit)="onSubmit()">
 
-    <div>
-        <label>Check-In Datum:</label>
-        <input type="date" id="checkInDate" formControlName="checkInDate" class="ng-dirty ng-valid ng-touched">
+    @if (testModus === 1) {
+    <div class="mb-3">
+        <label class="form-label" for="id">Id:</label>
+        <input class="form-control" type="text" id="id" formControlName="id" readonly>
+    </div>
+    }
+
+    <div class="row mb-3">
+        <div class="col">
+            <label class="form-label" for="checkInDate">Check-In Datum:</label>
+            <input class="form-control ng-dirty ng-valid ng-touched" type="date" id="checkInDate"
+                formControlName="checkInDate">
 
 
-        @if (reservationForm.get('checkInDate')?.invalid && reservationForm.get('checkInDate')?.touched) {
-            <div>
+            @if (reservationForm.get('checkInDate')?.errors?.['minToday'] && reservationForm.get('checkInDate')?.touched) {
+            <small class="text-danger">
+                Das Check-In Datum darf nicht vor dem heutigen Datum liegen.
+            </small>
+            }
+            @if (reservationForm.get('checkInDate')?.invalid && reservationForm.get('checkInDate')?.touched && !reservationForm.get('checkInDate')?.errors?.['minToday']) {
+            <small class="text-danger">
                 Bitte geben Sie ein gültiges Check-In Datum ein.
-            </div>
-        }
-    </div>
-
-    <div>
-        <label>Check-Out Datum:</label>
-        <input type="date" id="checkOutDate" formControlName="checkOutDate">
-        @if (reservationForm.get('checkOutDate')?.errors?.['dateRange'] && reservationForm.get('checkOutDate')?.touched) {
-            <div>
+            </small>
+            }
+        </div>
+        <div class="col">
+            <label class="form-label" for="checkOutDate">Check-Out Datum:</label>
+            <input class="form-control ng-dirty ng-valid ng-touched" type="date" id="checkOutDate"
+                formControlName="checkOutDate">
+            @if (reservationForm.get('checkOutDate')?.errors?.['dateRange'] &&
+            reservationForm.get('checkOutDate')?.touched) {
+            <small class="text-danger">
                 Das Auscheckdatum muss größer als das Eincheckdatum sein.
-            </div>
-        }
-        @if (reservationForm.get('checkOutDate')?.invalid && reservationForm.get('checkOutDate')?.touched && !reservationForm.get('checkOutDate')?.errors?.['dateRange']) {
-            <div>
+            </small>
+            }
+            @if (reservationForm.get('checkOutDate')?.invalid && reservationForm.get('checkOutDate')?.touched &&
+            !reservationForm.get('checkOutDate')?.errors?.['dateRange']) {
+            <small class="text-danger">
                 Bitte geben Sie ein gültiges Check-Out Datum ein.
-            </div>
-        }
+            </small>
+            }
+        </div>
     </div>
 
-    <div>
-        <label>Name des Gastes:</label>
-        <input type="text" id="guestName" formControlName="guestName">
-        @if (reservationForm.get('guestName')?.invalid && reservationForm.get('guestName')?.touched) {
-            <div>
+    <div class="row mb-3">
+        <div class="col">
+            <label class="form-label" for="guestName">Name des Gastes:</label>
+            <input class="form-control ng-dirty ng-valid ng-touched" type="text" id="guestName"
+                formControlName="guestName">
+            @if (reservationForm.get('guestName')?.invalid && reservationForm.get('guestName')?.touched) {
+            <small class="text-danger">
                 Bitte geben Sie einen gültigen Gästenamen ein.
-            </div>
-        }
-    </div>
-
-    <div>
-        <label>E-Mail des Gastes:</label>
-        <input type="email" id="guestEmail" formControlName="guestEmail">
-        @if (reservationForm.get('guestEmail')?.invalid && reservationForm.get('guestEmail')?.touched) {
-            <div>
+            </small>
+            }
+        </div>
+        <div class="col">
+            <label class="form-label" for="guestEmail">E-Mail des Gastes:</label>
+            <input class="form-control ng-dirty ng-valid ng-touched" type="email" id="guestEmail"
+                formControlName="guestEmail">
+            @if (reservationForm.get('guestEmail')?.invalid && reservationForm.get('guestEmail')?.touched) {
+            <small class="text-danger">
                 Bitte geben Sie eine gültige E-Mail-Adresse ein.
-            </div>
-        }
+            </small>
+            }
+        </div>
     </div>
 
-    <div>
-        <label>Zimmernummer:</label>
-        <input type="number" id="roomNumber" formControlName="roomNumber">
-        @if (reservationForm.get('roomNumber')?.invalid && reservationForm.get('roomNumber')?.touched) {
-            <div>
-                Bitte geben Sie eine gültige Raumnummer ein.
-            </div>
-        }
+    <div class="row mb-3">
+        <div class="col-3">
+            <label class="form-label" for="roomNumber">Zimmernummer:</label>
+            <input class="form-control ng-dirty ng-valid ng-touched" type="number" id="roomNumber"
+                formControlName="roomNumber">
+            @if (reservationForm.get('roomNumber')?.invalid && reservationForm.get('roomNumber')?.touched) {
+            <small class="text-danger">
+                Bitte geben Sie eine gültige Zimmernummer ein.
+            </small>
+            }
+        </div>
     </div>
 
-    <button type="submit" [disabled]="reservationForm.invalid">Absenden</button>
+    <button class="btn btn-primary" type="submit" [disabled]="reservationForm.invalid || isCompletedStay">Absenden</button>
 
 </form>

@@ -1,9 +1,12 @@
-<div class="container">
+<app-home></app-home>
 
-        <div class="row py-2 border-bottom">
-            <div class="col-md-5"><h2>Liste der Reservierungen</h2></div>
-            <div class="col-md-3">
-                <button class="btn btn-primary btn-sm w-100" (click)="navigateNewReservation()">
+<div class="container">
+        <div class="row py-2 border-bottom align-items-center">
+            <div class="col-md-10">
+                <h3 class="mt-5 mb-3">Liste der Reservierungen</h3>
+            </div>
+            <div class="col-md-2 d-flex justify-content-end">
+                <button class="btn btn-primary btn-sm" (click)="navigateNewReservation()">
                     Neue Reservierung anlegen
                 </button>
             </div>
@@ -12,29 +15,86 @@
     <div class="mt-2">
         @if (reservations.length > 0) {
         <!-- Spalten-Header -->
-        <div class="row mt-3 fw-bold">
-            <div class="col-md-3">Gast</div>
+        <div class="row mt-3 fw-bold align-items-center">
+            @if (testModus === 1) {
+                <div class="col-md-1">Id</div>
+            }
+            <div class="col-md-2">Gast</div>
             <div class="col-md-3">E-Mail</div>
             <div class="col-md-1">Zimmer</div>
             <div class="col-md-2">Check-In</div>
             <div class="col-md-2">Check-Out</div>
-            <div class="col-md-1">Aktion</div>
+            <div class="col-md-2 text-end">Aktion</div>
         </div>
 
         <!-- Listen-Einträge -->
-        @for (reservation of reservations; track reservation.id) {
-        <div class="row py-2 border-bottom">
-            <div class="col-md-3">{{ reservation.guestName }}</div>
+        @for (reservation of reservations; track reservation.id; let i = $index) {
+        <div class="row py-2 border-bottom align-items-center" [class.bg-light]="i % 2 === 0">
+            <div class="col-md-2">{{ reservation.guestName }}</div>
             <div class="col-md-3">{{ reservation.guestEmail }}</div>
             <div class="col-md-1">{{ reservation.roomNumber }}</div>
             <div class="col-md-2">{{ reservation.checkInDate }}</div>
             <div class="col-md-2">{{ reservation.checkOutDate }}</div>
-            <div class="col-md-1">
-                <button class="btn btn-danger btn-sm w-100" (click)="deleteReservation(reservation.id)">
-                    Löschen
+            @if (testModus === 1) {
+                <div class="col-md-1">{{ reservation.id }}</div>
+            }
+            <div class="d-flex justify-content-end align-items-center gap-1" [class.col-md-2]="testModus !== 1" [class.col-md-1]="testModus === 1">
+                <button
+                    type="button"
+                    class="btn btn-primary btn-sm app-icon-button"
+                    [routerLink]="['/edit', reservation.id]"
+                    aria-label="Bearbeiten"
+                    title="Reservierung bearbeiten"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                        focusable="false"
+                    >
+                        <path d="M11.8 2.3a1 1 0 0 1 1.4 1.4L6 11l-3 1 1-3 7.8-6.7Z" />
+                        <path d="M10.5 3.6l1.9 1.9" />
+                    </svg>
+                    <span class="visually-hidden">Bearbeiten</span>
+                </button>
+
+                <button
+                    type="button"
+                    class="btn btn-danger btn-sm app-icon-button"
+                    (click)="deleteReservation(reservation.id)"
+                    aria-label="Löschen"
+                    title="Reservierung löschen"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                        focusable="false"
+                    >
+                        <path d="M3 4.5h10" />
+                        <path d="M6 2.5h4" />
+                        <rect x="5" y="4.5" width="6" height="9" rx="1" />
+                        <path d="M7 7v4" />
+                        <path d="M9 7v4" />
+                    </svg>
+                    <span class="visually-hidden">Löschen</span>
                 </button>
             </div>
-        </div>
+       </div>
         }
         } @else {
         <div class="mt-3">
